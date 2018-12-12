@@ -30,3 +30,13 @@ func Max(arr []int) int {
 	}
 	return max
 }
+
+func Min(arr []int) int {
+	min := arr[0]
+	for _, value := range arr {
+		if min > value {
+			min = value
+		}
+	}
+	return min
+}
