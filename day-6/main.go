@@ -41,8 +41,7 @@ func manhattan(x1, y1, x2, y2 int) int {
 	return util.Abs(x1-x2) + util.Abs(y1-y2)
 }
 
-func Grid(points []Point) grid {
-	// find max coordinate
+func maxPoint(points []Point) int {
 	max := 0
 	for _, point := range points {
 		if point.X > max {
@@ -52,19 +51,22 @@ func Grid(points []Point) grid {
 			max = point.Y
 		}
 	}
-
 	// allow one extra row/column of buffer
-	max++
+	return max + 1
+}
+
+func Grid(points []Point, size int) grid {
+	// find max coordinate
 
 	// declare 2d array of max-coordinate length x width
-	grid := make([][]int, max)
+	grid := make([][]int, size)
 	for i := range grid {
-		grid[i] = make([]int, max)
+		grid[i] = make([]int, size)
 	}
 
 	// fill in grid with shortest manhattan distances; there must be a clear winner
-	for gridY := 0; gridY < max; gridY++ {
-		for gridX := 0; gridX < max; gridX++ {
+	for gridY := 0; gridY < size; gridY++ {
+		for gridX := 0; gridX < size; gridX++ {
 			candidates := make(distindicies, len(points))
 			for i, point := range points {
 				candidates[i] = distindex{distance: manhattan(gridX, gridY, point.X, point.Y), index: i}
@@ -106,6 +108,7 @@ func Area(g grid) map[int]int {
 }
 
 func main() {
+	// create array of points
 	input := util.FileLines("input.txt")
 	points := make([]Point, len(input))
 	for i, line := range input {
@@ -114,9 +117,27 @@ func main() {
 		y, _ := strconv.Atoi(values[1])
 		points[i] = Point{x, y}
 	}
-	grid := Grid(points)
+
+	// First star: make area grid, then print out the finite area sizes
+	size := maxPoint(points)
+	grid := Grid(points, size)
 	areas := Area(grid)
 	for x, y := range areas {
 		fmt.Println(x, y)
 	}
+
+	// Second star: how many points have sum(manhattan(point) for point in points) < 10000?
+	inRegion := 0
+	for i := 0; i < size; i++ {
+		for j := 0; j < size; j++ {
+			total := 0
+			for _, point := range points {
+				total += manhattan(i, j, point.X, point.Y)
+			}
+			if total < 10000 {
+				inRegion++
+			}
+		}
+	}
+	fmt.Println("Size of target region:", inRegion)
 }
