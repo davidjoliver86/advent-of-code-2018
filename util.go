@@ -41,6 +41,14 @@ func Min(arr []int) int {
 	return min
 }
 
+func Sum(arr []int) int {
+	sum := 0
+	for _, value := range arr {
+		sum += value
+	}
+	return sum
+}
+
 func Abs(n int) int {
 	if n < 0 {
 		return -n
