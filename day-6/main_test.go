@@ -21,7 +21,7 @@ var example = testcaseArea{
 }
 
 func TestArea(t *testing.T) {
-	grid := Grid(example.points)
+	grid := Grid(example.points, 10)
 	areas := Area(grid)
 	if areas[4] != example.expected {
 		t.Errorf("Expected area of point E to be %d, got %d", example.expected, areas[4])

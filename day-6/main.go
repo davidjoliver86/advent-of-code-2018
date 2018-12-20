@@ -9,6 +9,7 @@ import (
 	util "github.com/davidjoliver86/advent-of-code-2018"
 )
 
+// Point refers to a X,Y coordinate on the map
 type Point struct {
 	X, Y int
 }
@@ -55,6 +56,7 @@ func maxPoint(points []Point) int {
 	return max + 1
 }
 
+// Grid creates a grid out of points then fills it in with the shortest Manhattan distances
 func Grid(points []Point, size int) grid {
 	// find max coordinate
 
