@@ -69,13 +69,20 @@ func NewFleet(input string) *Fleet {
 
 // MoveAll moves all the carts in the fleet, but the carts must be moved in a certain order.
 // All the carts must move in the top->bottom, left->right order they're currently in.
-func (f *Fleet) MoveAll(track *Track) {
+func (f *Fleet) MoveAll(track *Track) bool {
+	fmt.Println("TICK!")
 	sort.Sort(f.Carts)
 	for _, cart := range f.Carts {
 		fmt.Println(cart, "is moving")
 		cart.Move(track)
 		f.Positions[cart] = cart.Position
+		crashes := f.Crashes()
+		fmt.Println(crashes)
+		if len(crashes) > 0 {
+			return true
+		}
 	}
+	return false
 }
 
 // Crashes polls all the carts' coordinates and returns the coordinate pairs of crashes.

@@ -109,12 +109,8 @@ func (c *Cart) HandleIntersection() {
 	action := c.intersections % 3
 	switch action {
 	case turnLeft:
-		fmt.Println(c, "turns left")
 		c.TurnLeft()
-	case straight:
-		fmt.Println(c, "goes straight")
 	case turnRight:
-		fmt.Println(c, "turns right")
 		c.TurnRight()
 	}
 	c.intersections++
