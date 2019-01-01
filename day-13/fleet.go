@@ -52,6 +52,7 @@ func NewFleet(input string) *Fleet {
 	id := 1
 	positions := make(map[*Cart]Coordinates)
 	for row, line := range lines {
+		fmt.Println(line)
 		for col, ch := range line {
 			if ch == '<' || ch == '>' || ch == 'v' || ch == '^' {
 				coordinates := Coordinates{col, row}
