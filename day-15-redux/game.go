@@ -83,10 +83,50 @@ func (g *Game) Turn() bool {
 			}
 		}
 		fmt.Println(active, inRange)
+
+		// whats reachable
+		reachable := make([]Node, 0)
 		for _, node := range inRange {
-			fmt.Println(active.Reachable(node, g.Board()))
-			fmt.Println(active.DistanceFrom(node, g.Board()))
+			if active.Reachable(node, g.Board()) {
+				reachable = append(reachable, node)
+			}
 		}
+		fmt.Println(reachable)
+
+		// select the first reachable node by reading order
+		target := reachable[0]
+		for _, candidate := range reachable {
+			if candidate.y < target.y {
+				target = candidate
+			}
+			if candidate.x < target.x {
+				target = candidate
+			}
+		}
+
+		// after finding the best path to reach the target, take one step along it
+		dir, err := active.DistanceFrom(target, g.Board())
+		if dir == Up {
+			active.y--
+			g.board[active.y][active.x] = active.kind
+			g.board[active.y+1][active.x] = Space
+		}
+		if dir == Down {
+			active.y++
+			g.board[active.y][active.x] = active.kind
+			g.board[active.y-1][active.x] = Space
+		}
+		if dir == Left {
+			active.x--
+			g.board[active.y][active.x] = active.kind
+			g.board[active.y][active.x+1] = Space
+		}
+		if dir == Right {
+			active.x++
+			g.board[active.y][active.x] = active.kind
+			g.board[active.y][active.x-1] = Space
+		}
+		fmt.Println(dir, err)
 	}
 	return true
 }

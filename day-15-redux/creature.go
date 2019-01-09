@@ -1,6 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+const (
+	Up = iota
+	Down
+	Left
+	Right
+)
 
 type Creature struct {
 	kind   rune
@@ -100,7 +110,7 @@ func (c *Creature) Reachable(target Node, board [][]rune) bool {
 	return false
 }
 
-func (c *Creature) DistanceFrom(target Node, board [][]rune) int {
+func (c *Creature) DistanceFrom(target Node, board [][]rune) (int, error) {
 	distances := make([]DistNode, 1)
 	distances[0] = DistNode{c.x, c.y, 0}
 	currentDist := 0
@@ -162,5 +172,17 @@ func (c *Creature) DistanceFrom(target Node, board [][]rune) int {
 			}
 		}
 	}
-	return 0
+	if (winner.x+1) == c.x && winner.y == c.y {
+		return Left, nil
+	}
+	if (winner.x-1) == c.x && winner.y == c.y {
+		return Right, nil
+	}
+	if winner.x == c.x && (winner.y+1) == c.y {
+		return Up, nil
+	}
+	if winner.x == c.x && (winner.y-1) == c.y {
+		return Down, nil
+	}
+	return 0, errors.New("I'm confused")
 }
